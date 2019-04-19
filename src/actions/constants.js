@@ -1,0 +1,7 @@
+const SET_FRAMES = 'SET_FRAMES'
+const ADD_POINTS = 'ADD_POINTS'
+
+export {
+    SET_FRAMES,
+    ADD_POINTS
+}
