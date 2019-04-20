@@ -8,7 +8,8 @@ import {createStore} from 'redux';
 import rootReducer from './reducers/reducer.js'
 
 const initialState ={
-    frames: []
+    frames: [],
+    counter: []
 };
 
 

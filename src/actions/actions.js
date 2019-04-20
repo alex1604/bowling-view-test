@@ -1,4 +1,4 @@
-import { SET_FRAMES, ADD_POINTS } from './constants.js';
+import { SET_FRAMES, ADD_POINTS, UPDATE_COUNTER } from './constants.js';
 
 let setFrames = (frames) => {
 	return {
@@ -13,7 +13,15 @@ let addPoints = () => {
     }
 }
 
+let updateCounter = (nextCounter) => {
+    return {
+        type: UPDATE_COUNTER,
+        counter: nextCounter
+    }
+}
+
 export {
     setFrames,
-    addPoints
+    addPoints,
+    updateCounter
 };
