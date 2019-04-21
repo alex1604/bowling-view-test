@@ -4,7 +4,8 @@ import styled from 'styled-components'
 const Button = styled.div`
     border: 2px solid gray;
     border-radius: 20px;
-    width: 7%;
+    width: 50px;
+    margin-right: 10px;
     height: 5vh;
     display: flex;
     flex-direction: row;

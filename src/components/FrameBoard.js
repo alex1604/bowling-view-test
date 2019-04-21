@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { isSpare, isStrike } from '../utils/rollManager'
 
 const Container = styled.div`
     border-left: 2px solid gray;
@@ -34,10 +35,31 @@ const RollTwo = styled.div`
     align-items: center;
 `
 
+const displayConverterLeft = (rolls) => {
+    try {
+        let display = rolls[0]
+        if (isStrike(rolls)) display = 'X'
+        return display
+    } catch {
+        return ''
+    }
+}
+
+const displayConverterRight = (rolls) => {
+    try {
+        let display = rolls[1]
+        if (isStrike(rolls)) display = ''
+        if (isSpare(rolls)) display = '/'
+        return display
+    } catch {
+        return ''
+    }
+}
+
 const FrameBoard = props => (
     <Container>
-        <RollOne>{props.rolls[0]}</RollOne>
-        <RollTwo>{props.rolls[1]}</RollTwo>
+        <RollOne>{displayConverterLeft(props.rolls)}</RollOne>
+        <RollTwo>{displayConverterRight(props.rolls)}</RollTwo>
     </Container>
 )
 

@@ -7,7 +7,7 @@ const Selector = styled.div`
     height: 10vh;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
 `
 

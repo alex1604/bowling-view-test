@@ -1,4 +1,4 @@
-import { rollBowls, isStrike, isSpare } from '../actions/rollManager.js';
+import { rollBowls, isStrike, isSpare } from '../utils/rollManager.js';
 import React from 'react';
 
 describe('we are testing roll generation here:', () => {

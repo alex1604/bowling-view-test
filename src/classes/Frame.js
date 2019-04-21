@@ -1,4 +1,4 @@
-import {isStrike, isSpare} from '../actions/rollManager'
+import {isStrike, isSpare} from '../utils/rollManager'
 
 export default class Frame {
     constructor(i){
