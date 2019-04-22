@@ -60,7 +60,7 @@ function checkPreviousSpare(counter, frames, index) {
   let previousFrame = frames[index - 1]
   let previousPreviousCounter = index - 2 < 0 ? 0 : counter[index - 2]
 
-  let isLastRoll = index === frames.length - 1
+  let isLastRoll = index === 9
 
   if (previousFrame.spare) {
     nextCounter[index - 1] = previousPreviousCounter + currentFrame.rolls[0] + 10

@@ -10,6 +10,18 @@ const framesNoStrikesBefore = [{
     rolls: [3, 2],
     strike: false,
 }]
+const framesNoSparesBefore = [{
+    rolls: [3, 0],
+    spare: false,
+},
+{
+    rolls: [0, 1],
+    spare: false,
+},
+{
+    rolls: [3, 2],
+    spare: false,
+}]
 const framesCurrentStrikeTwoPreviousStrikes = [
     {
         rolls: [3, 0],
@@ -50,6 +62,41 @@ const framesCurrentStrikeOnePreviousStrikes = [
         strike: true,
         spare: false
     }]
+const framesCurrentSpareOnePreviousSpare = [
+    {
+        rolls: [3, 0],
+        spare: false
+    }, {
+        rolls: [3, 0],
+        spare: false
+    },
+    {
+        rolls: [10, 0],
+        spare: true
+    },
+    {
+        rolls: [10, 0],
+        spare: true
+    }]
+const counterCurrentSpareOnePreviousSpare = [3,6,'?']
+const framesNotCurrentStrikeOnePreviousStrikes = [
+    {
+        rolls: [3, 0],
+        spare: false
+    }, {
+        rolls: [3, 0],
+        spare: false
+    },
+    {
+        rolls: [10, 0],
+        spare: true
+    },
+    {
+        rolls: [5, 0],
+        spare: false
+    }
+]
+const counterNotCurrentStrikeOnePreviousStrikes = [3,6,'?']
 const framesNoCurrentStrikeTwoPreviousStrikes = [
     {
         rolls: [3, 0],
@@ -101,5 +148,10 @@ export {
     framesCurrentStrikeTwoPreviousStrikes,
     framesNoCurrentStrikeOnePreviousStrikes,
     framesNoCurrentStrikeTwoPreviousStrikes,
-    framesNoStrikesBefore
+    framesNoStrikesBefore,
+    framesNoSparesBefore,
+    framesCurrentSpareOnePreviousSpare,
+    counterCurrentSpareOnePreviousSpare,
+    counterNotCurrentStrikeOnePreviousStrikes,
+    framesNotCurrentStrikeOnePreviousStrikes
 }

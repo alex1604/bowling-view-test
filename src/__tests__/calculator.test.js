@@ -9,7 +9,12 @@ import {
     framesCurrentStrikeTwoPreviousStrikes,
     framesNoCurrentStrikeOnePreviousStrikes,
     framesNoCurrentStrikeTwoPreviousStrikes,
-    framesNoStrikesBefore
+    framesNoStrikesBefore,
+    framesNoSparesBefore,
+    framesCurrentSpareOnePreviousSpare,
+    counterCurrentSpareOnePreviousSpare,
+    counterNotCurrentStrikeOnePreviousStrikes,
+    framesNotCurrentStrikeOnePreviousStrikes
 } from '../testConstants/constants'
 
 describe('test cumulated hits:', () => {
@@ -39,5 +44,20 @@ describe('test checkPreviousStrikes :', () => {
     it('returns right counter if not current strike but one previous strikes:', () => {
         let nextCounter = checkPreviousStrikes(counterNotCurrentStrikeOnePreviousStrike, framesNoCurrentStrikeOnePreviousStrikes, 2)
         expect(nextCounter).toEqual([3, 18])
+    })
+})
+
+describe('test checkPreviousSpares :', () => {
+    it('returns original counter if no spares', () => {
+        let nextCounter = checkPreviousSpare(counter, framesNoSparesBefore, 2)
+        expect(nextCounter).toEqual(counter)
+    })
+    it('returns right counter if current spare and previous spare:', () => {
+        let nextCounter = checkPreviousSpare(counterCurrentSpareOnePreviousSpare, framesCurrentSpareOnePreviousSpare, 3)
+        expect(nextCounter).toEqual([3, 6, 26])
+    })
+    it('returns right counter if not current spare and one previous spare:', () => {
+        let nextCounter = checkPreviousSpare(counterNotCurrentStrikeOnePreviousStrikes, framesNotCurrentStrikeOnePreviousStrikes, 3)
+        expect(nextCounter).toEqual([3, 6, 21])
     })
 })
