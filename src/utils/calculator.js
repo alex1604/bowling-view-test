@@ -32,12 +32,12 @@ function checkPreviousStrikes(counter, frames, index) {
   }
   if (!currentFrame.strike) {
     if (previousFrame.strike) {
-      nextCounter[index - 1] = 10 + currentFrame.rolls.reduce(addition) + calculateCumulatedHits(counter, frames, index - 1)
       if (previousPreviousFrame === undefined || !previousPreviousFrame.strike) {
+        nextCounter[index - 1] = 10 + currentFrame.rolls.reduce(addition) + calculateCumulatedHits(counter, frames, index - 1)
         return nextCounter
       } else {  // if frame before previous frame was also strike
         nextCounter[index - 2] = 20 + calculateCumulatedHits(counter, frames, index - 2)
-        nextCounter[index - 1] += nextCounter[index - 2]
+        nextCounter[index - 1] = nextCounter[index - 1] = 10 + currentFrame.rolls.reduce(addition) + calculateCumulatedHits(counter, frames, index - 1)
         return nextCounter
       }
     }
