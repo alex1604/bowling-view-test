@@ -5,7 +5,6 @@ function calculateCumulatedHits(counter, frames, pos) {
   let result = pos < 0 ? 0 : counter[pos]
   let frame = frames[pos]
   result = result === '?' ? frame.rolls.reduce(addition) + counter[pos - 1] : result
-  console.log('cumulated = ', result)
   return result
 }
 
@@ -39,7 +38,6 @@ function checkPreviousStrikes(counter, frames, index) {
       } else {  // if frame before previous frame was also strike
         nextCounter[index - 2] = 20 + calculateCumulatedHits(counter, frames, index - 2)
         nextCounter[index - 1] = 20 + currentFrame.rolls.reduce(addition) + calculateCumulatedHits(counter, frames, index - 1)
-        console.log('nextCounter', nextCounter)
         return nextCounter
       }
     }

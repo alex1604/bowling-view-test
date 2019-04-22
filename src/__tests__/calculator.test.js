@@ -14,7 +14,11 @@ import {
     framesCurrentSpareOnePreviousSpare,
     counterCurrentSpareOnePreviousSpare,
     counterNotCurrentStrikeOnePreviousStrikes,
-    framesNotCurrentStrikeOnePreviousStrikes
+    framesNotCurrentStrikeOnePreviousStrikes,
+    framesFinalCheck,
+    counterFinalCheck,
+    counterForTotalCountCheck,
+    framesTotalCount
 } from '../testConstants/constants'
 
 describe('test cumulated hits:', () => {
@@ -59,5 +63,19 @@ describe('test checkPreviousSpares :', () => {
     it('returns right counter if not current spare and one previous spare:', () => {
         let nextCounter = checkPreviousSpare(counterNotCurrentStrikeOnePreviousStrikes, framesNotCurrentStrikeOnePreviousStrikes, 3)
         expect(nextCounter).toEqual([3, 6, 21])
+    })
+})
+
+describe('test checkFinalCheck :', () => {
+    it('returns right final result with 3 rolls on last frame:', () => {
+        let nextCounter = checkFinalFrame(counterFinalCheck, framesFinalCheck, 9)
+        expect(nextCounter).toEqual([3,6,9,12,15,18,21,24,27,40])
+    })
+})
+
+describe('test countTotal :', () => {
+    it('returns right updated counter after complete frame:',() => {
+        let nextCounter = countTotal(counterForTotalCountCheck, framesTotalCount, 4)
+        expect(nextCounter).toEqual([3,23,43,53])
     })
 })
