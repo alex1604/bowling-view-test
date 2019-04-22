@@ -1,8 +1,3 @@
-function newRoll(pinsLeft) {  // return random roll
-    let roll = Math.ceil(Math.random() * pinsLeft)
-    return roll
-}
-
 function isStrike(rolls) {
     // if first roll is 10 then strike
     let strike = rolls[0] === 10 ? true : false

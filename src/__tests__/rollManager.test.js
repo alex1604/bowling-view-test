@@ -1,15 +1,5 @@
-import { rollBowls, isStrike, isSpare } from '../utils/rollManager.js';
+import { isStrike, isSpare } from '../utils/rollManager.js';
 import React from 'react';
-
-describe('we are testing roll generation here:', () => {
-    it('returns two rolls for each frame:', () => {
-        expect(rollBowls().length).toBe(2)
-    })
-    it('returns a maximum of ten hits per frame:', () => {
-        let totalHits = rollBowls().reduce((x,y) => x+y )
-        expect(totalHits).toBeLessThanOrEqual(10)
-    })
-})
 
 describe('we are testing strike check here:', () => {
     it('returns false if 10 hits on second roll (spare):', () => {

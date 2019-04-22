@@ -2,9 +2,10 @@ const addition = (a, b) => a + b
 
 function calculateCumulatedHits(counter, frames, pos) {
   pos--
-  let result = pos === 0 ? 0 : counter[pos]
+  let result = pos < 0 ? 0 : counter[pos]
   let frame = frames[pos]
   result = result === '?' ? frame.rolls.reduce(addition) + counter[pos - 1] : result
+  console.log('cumulated = ', result)
   return result
 }
 
@@ -14,7 +15,7 @@ function checkPreviousStrikes(counter, frames, index) {
   let previousFrame = frames[index - 1]
   let previousPreviousFrame = frames[index - 2]
 
-  let isLastRoll = index === frames.length - 1
+  let isLastRoll = index === 9
 
   if (isLastRoll) { // special case if next frame is last frame
     if (previousFrame.strike) {
@@ -37,7 +38,8 @@ function checkPreviousStrikes(counter, frames, index) {
         return nextCounter
       } else {  // if frame before previous frame was also strike
         nextCounter[index - 2] = 20 + calculateCumulatedHits(counter, frames, index - 2)
-        nextCounter[index - 1] = nextCounter[index - 1] = 10 + currentFrame.rolls.reduce(addition) + calculateCumulatedHits(counter, frames, index - 1)
+        nextCounter[index - 1] = 20 + currentFrame.rolls.reduce(addition) + calculateCumulatedHits(counter, frames, index - 1)
+        console.log('nextCounter', nextCounter)
         return nextCounter
       }
     }
@@ -49,6 +51,7 @@ function checkPreviousStrikes(counter, frames, index) {
       }
     }
   }
+  return nextCounter
 }
 
 function checkPreviousSpare(counter, frames, index) {
@@ -98,5 +101,6 @@ export {
   checkPreviousStrikes,
   checkPreviousSpare,
   countTotal,
-  checkFinalFrame
+  checkFinalFrame,
+  calculateCumulatedHits
 }
