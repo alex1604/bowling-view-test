@@ -1,15 +1,17 @@
-import {isStrike, isSpare} from '../utils/rollManager'
+import { isStrike, isSpare } from '../utils/rollManager'
 
 export default class Frame {
-    constructor(i){
+    constructor(i) {
         this.rolls = []
         this.strike = false
         this.spare = false
         this.index = i
     }
-    addRolls(rolls){
+    addRolls(rolls) {
         this.rolls = rolls
-        this.strike = isStrike(rolls)
-        this.spare = isSpare(rolls)
+        if (rolls.length === 2) {
+            this.strike = isStrike(rolls)
+            this.spare = isSpare(rolls)
+        }
     }
 }

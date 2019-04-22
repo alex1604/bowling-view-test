@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import FrameBoard from './FrameBoard'
+import LastFrameBoard from './LastFrameBoard'
 
 const addition = (a, b) => a + b
 
@@ -47,11 +48,16 @@ class ScoreBoard extends Component {
 
     render() {
 
-        let frames = this.props.frames.map(frame => (
+        let frames = this.props.frames.map(frame => frame.index < 9 ? (
             <Frame key={frame.index}>
                 <FrameBoard rolls={frame.rolls} index={frame.index}/>
                 <Total>{this.props.counter[frame.index] !== undefined ? this.props.counter[frame.index] : ''}</Total>
             </Frame>
+        ):(
+            <Frame key={frame.index}>
+                <LastFrameBoard rolls={frame.rolls} index={frame.index}/>
+                <Total>{this.props.counter[frame.index] !== undefined ? this.props.counter[frame.index] : ''}</Total>
+            </Frame> 
         ))
         return (
             <Container>

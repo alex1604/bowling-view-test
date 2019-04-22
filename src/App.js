@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { setFrames, updateCounter, addPoints } from './actions/actions'
 import ScoreBoard from './components/ScoreBoard'
 import HitSelector from './components/HitSelector'
-import { checkPreviousStrikes, checkPreviousSpare, countTotal } from './utils/calculator'
+import { checkPreviousStrikes, checkPreviousSpare, checkFinalFrame, countTotal } from './utils/calculator'
 
 const addition = (a, b) => a + b
 const options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -19,127 +19,48 @@ class App extends Component {
       currentOptions: [...options]
     }
   }
-  componentWillMount() {
+  componentWillMount() {  // generate array of Frames and update frames in state by dispatching an action
     let frames = init()
     this.props.dispatch(setFrames(frames))
   }
 
-  /*  calculateCumulatedHits = pos => {
-      const { counter } = this.props
-      let result = pos === 0 ? 0 : counter[pos - 1]
-      return result
-    }
-  
-    checkPreviousStrikes = () => {
-      let { index } = this.state
-      const { counter, frames } = this.props
-      let nextCounter = [...counter]
-      let currentFrame = frames[index]
-      let previousFrame = frames[index - 1]
-      let previousPreviousFrame = frames[index - 2]
-  
-      let isLastRoll = index === frames.length - 1
-  
-      if (isLastRoll && previousFrame.strike && previousPreviousFrame.strike) {
-        nextCounter[index - 2] = 30 + this.calculateCumulatedHits(index - 2)
-        nextCounter[index - 1] = 30 + nextCounter[index - 2]
-        nextCounter[index] = 30 + nextCounter[index - 1]
-        let action = updateCounter(nextCounter)
-        this.props.dispatch(action)
-      }
-      // if currentRoll is Strike and third strike in a row ==> add bonus of 30 to first strike
-      else if (!currentFrame.strike && previousFrame.strike && previousPreviousFrame === undefined) {
-        nextCounter[index - 1] = 10 + currentFrame.rolls.reduce(addition) + this.calculateCumulatedHits(index - 1)
-        console.log('modified nextCounter = ', nextCounter)
-        let action = updateCounter(nextCounter)
-        this.props.dispatch(action)
-      } else if (!currentFrame.strike && previousFrame.strike && !previousPreviousFrame.strike) {
-        nextCounter[index - 1] = 10 + currentFrame.rolls.reduce(addition) + this.calculateCumulatedHits(index - 1)
-   
-        let action = updateCounter(nextCounter)
-        this.props.dispatch(action)
-      } else if (currentFrame.strike && previousFrame.strike && previousPreviousFrame === undefined) {
-        nextCounter[index - 2] = 30 + this.calculateCumulatedHits(index - 2)
-        console.log('modified nextCounter = ', nextCounter)
-        let action = updateCounter(nextCounter)
-        this.props.dispatch(action)
-      } else if (currentFrame.strike && previousFrame.strike && previousPreviousFrame.strike) {
-        nextCounter[index - 2] = 30 + this.calculateCumulatedHits(index - 2)
-        console.log('modified nextCounter = ', nextCounter)
-        let action = updateCounter(nextCounter)
-        this.props.dispatch(action)
-      } else if (!currentFrame.strike && previousFrame.strike && previousPreviousFrame.strike) {
-        nextCounter[index - 2] = 20 + this.calculateCumulatedHits(index - 2)
-        nextCounter[index - 1] = 20 + 10 + currentFrame.rolls.reduce(addition) + this.calculateCumulatedHits(index - 2)
-        console.log('modified nextCounter = ', nextCounter)
-        let action = updateCounter(nextCounter)
-        this.props.dispatch(action)
-      }
-      //}
-    } */
-  /*checkPreviousSpare = () => {
-  let { index } = this.state
-  const { counter, frames } = this.props
-  let nextCounter = [...counter]
-  let currentFrame = frames[index]
-  let previousFrame = frames[index - 1]
+  calculatePointsFromStrikes = (counter) => {
+  // check if some previous frames were a strike and needs update with points from current frame 
+  //and update counter in state
 
-  let isLastRoll = index === frames.length - 1
-
-  console.log('previousSpare ?', nextCounter[index - 1], nextCounter)
-  // if currentRoll is Strike and third strike in a row ==> add bonus of 30 to first strike
-
-  if (previousFrame.spare) {
-    nextCounter[index - 1] = previousFrame.rolls.reduce(addition) + currentFrame.rolls[0] + this.calculateCumulatedHits(index - 1)
-    if (isLastRoll && currentFrame.spare) {
-      nextCounter[index] = 10 + nextCounter[index - 1]
-    }
-  }
-  let action = updateCounter(nextCounter)
-  this.props.dispatch(action)
-}
-
-*/
-
-  /*countTotal = () => {
-  const { frames, counter } = this.props
-  const { index } = this.state
-  let frame = frames[index - 1]
-  let nextFrame = frames[index]
-  console.log(frames)
-  let previousTotal = index > 1 ? counter[index - 2] : 0
-  let reducedFrameHits = frame.rolls.reduce(addition)
-  let total = previousTotal + reducedFrameHits
-  if ((!frame.strike && !frame.spare)) {
-    let nextCounter = [...counter, total]
-    let action = updateCounter(nextCounter)
-    this.props.dispatch(action)
-  } else {
-    let nextCounter = [...counter, '?']
-    let action = updateCounter(nextCounter)
-    this.props.dispatch(action)
-  }
-} */
-
-  calculatePointsFromStrikes = () => {
     const { index } = this.state
-    const { counter, frames } = this.props
-    let nextCounter = checkPreviousStrikes(counter, frames, index)
-    if (nextCounter !== undefined) {
+    const { frames } = this.props
+    let nextCounter = checkPreviousStrikes(counter, frames, index)  // perform the check and return next counter state
+    
+    if (nextCounter !== undefined) {  // update counter state
       let action = updateCounter(nextCounter)
-      console.log(action)
       this.props.dispatch(action)
     }
+    nextCounter = nextCounter !== undefined ? nextCounter : [...counter]
+    return nextCounter
   }
 
-  calculatePointsFromSpares = () => {
+  calculatePointsFromSpares = (counter) => {  
+    // check if previous frame was spare and needs update with points from current frame and update counter in state
     const { index } = this.state
-    const { counter, frames } = this.props
-    let nextCounter = checkPreviousSpare(counter, frames, index)
-    console.log('nextCounter =', nextCounter)
-    if (nextCounter !== undefined) {
+    const { frames } = this.props
+    let nextCounter = checkPreviousSpare(counter, frames, index)  // perform the check and return next counter state
+
+    if (nextCounter !== undefined) {  // update counter state
       let action = updateCounter(nextCounter)
-      console.log(action)
+      this.props.dispatch(action)
+    }
+    nextCounter = nextCounter !== undefined ? nextCounter : [...counter]
+    return nextCounter
+  }
+
+  finalCalculation = (counter) => {  // final calculation after points form last frame have been registered
+    const { index } = this.state
+    const { frames } = this.props
+    let nextCounter = checkFinalFrame(counter, frames, index)  // perform count operation for last frame 
+                                                              //and return final total point
+    if (nextCounter !== undefined) {  // update counter in state
+      let action = updateCounter(nextCounter)
       this.props.dispatch(action)
     }
   }
@@ -147,43 +68,77 @@ class App extends Component {
   updateTotalCumulatedPoints = () => {
     const { index } = this.state
     const { counter, frames } = this.props
-    let nextCounter = countTotal(counter, frames, index)
+    let nextCounter = countTotal(counter, frames, index)  // perform count operation and return next counter state
     let action = updateCounter(nextCounter)
-    this.props.dispatch(action)
+    this.props.dispatch(action)  // update counter state
   }
 
-  addPointsToFrame = (rolls) => {
-    console.log(rolls)
+  addPointsToFrame = (rolls, isNotLastFrame) => {
     const { index } = this.state
-    const { counter, frames } = this.props
-    console.log('current counter = ', counter)
+    const { counter } = this.props
     this.props.frames[index].addRolls(rolls) // add rolls to current Frame
     let action = addPoints()
-    this.props.dispatch(action) // update frames in state
-    if (index >= 1) this.calculatePointsFromSpares() // need to update total points from previous spare roll ?
-    if (index >= 1) this.calculatePointsFromStrikes() // need to update total points from previous strike roll ?
-
-    this.setState({ index: this.state.index + 1 }, () => {
-      this.updateTotalCumulatedPoints()
-    })
+    this.props.dispatch(action)
+    if (index >= 1) {
+      let nextCounter = this.calculatePointsFromSpares(counter)  // need to update total points from previous spare roll ?
+      nextCounter = this.calculatePointsFromStrikes(nextCounter) // need to update total points from previous strikes ?
+      if (index === 9) nextCounter = this.finalCalculation(nextCounter) // if last frame then perform final calculation
+    }
+    if (isNotLastFrame) {
+      this.setState({ index: this.state.index + 1 }, () => {  // update index
+        this.updateTotalCumulatedPoints()  // update total points cumulated till now and add them to counter
+      })
+    }
     // calculate cumulated points so far and update counter 
   }
 
   rollBowl = (x) => {
+    let isLastRoll = this.state.index === 9
     let { hits, currentOptions } = this.state
     let newOptions = currentOptions.splice(0, currentOptions.length - x) // remove hit pins from hit selector buttons
     hits.push(x) // add hit to hitset
-    console.log(hits)
     this.setState({ hits })
-    if (hits[0] === 10) { // if strike then automatically add points
-      hits.push(0)
-      this.setState({ hits: [], currentOptions: [...options] })
-      this.addPointsToFrame(hits)
-    } else if (hits.length === 2) {  // if frame complete, reset hits and selector buttons
-      this.setState({ hits: [], currentOptions: [...options] })
-      this.addPointsToFrame(hits)
-    } else {  // else update selector buttons
-      this.setState({ currentOptions: newOptions })
+    console.log('push x =', x)
+
+    if (!isLastRoll) {  // if last frame
+      if (hits[0] === 10) {  // if strike then automatically add ten points and a zero
+        hits.push(0)
+        this.setState({ hits: [], currentOptions: [...options] })
+        this.addPointsToFrame(hits, true)
+      } else if (hits.length === 2) {  // if current frame complete push frame result, 
+        // reset hits and selector buttons
+        this.setState({ hits: [], currentOptions: [...options] })  // reset roll selectors to 0-10
+        this.addPointsToFrame(hits, true)
+      } else {
+        this.setState({ currentOptions: newOptions })  // else update selector buttons
+      }
+    } else if (isLastRoll) {  // if last frame (special frame because of conditional amount of rolls up to 3)
+      switch (hits.length) {   // depending on current amount of rolls :
+        case 1:
+          if (hits[0] === 10) this.setState({ currentOptions: [...options] }) // if first roll is trike then keep all roll selectors 0-10
+          else this.setState({ currentOptions: newOptions })  // otherwise update and remove redundant roll selectors
+          break;
+        case 2:
+          if (hits[1] === 10) this.setState({ currentOptions: [...options] }) // if second roll is strike 
+          // keep all selectors 0-10 (and it means first roll was strike too)
+          else if (hits[0] + hits[1] < 10) {  // if no strike and no spare during two first rolls then end game by adding 0 to last roll
+            hits.push(0)
+            this.setState({ currentOptions: [...options] })
+            this.addPointsToFrame(hits, false)
+          } else if (hits[0] + hits[1] === 10) {  // if first and second roll made a spare
+            this.setState({ currentOptions: [...options] })
+          } else {  // otherwise update selector
+            this.setState({ currentOptions: newOptions })
+          }
+          break;
+        case 3:  // in case last frame contains 3 rolls (and that means at least one strike or spare) then end game
+          this.addPointsToFrame(hits, false) 
+          this.setState({ currentOptions: [...options] })
+          break;
+        default:
+          this.setState({ currentOptions: [...options] })  // reset selector buttons
+          break;
+      }
     }
   }
 
